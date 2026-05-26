@@ -1,12 +1,10 @@
 pipeline {
     agent any
-
     environment {
         DOCKERHUB_USER = "jazzy771"
         IMAGE_NAME = "${DOCKERHUB_USER}/plant-disease"
         IMAGE_TAG = "latest"
     }
-
     stages {
         stage('Checkout') {
             steps {
@@ -24,7 +22,6 @@ pipeline {
                 sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
             }
         }
-
         stage('Push to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(
@@ -37,7 +34,6 @@ pipeline {
                 }
             }
         }
-
         stage('Deploy to Kubernetes') {
             steps {
                 sh """
@@ -46,10 +42,10 @@ pipeline {
                     minikube kubectl -- apply -f /home/ubuntu/k8s/service.yaml &&
                     minikube kubectl -- rollout restart deployment/plant-disease-deployment
                     '
-                    """
-                }
+                """
+            }
         }
-
+    }
     post {
         success {
             echo 'Deployed successfully!'
