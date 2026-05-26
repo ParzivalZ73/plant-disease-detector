@@ -1,0 +1,6 @@
+flask==3.0.0
+tensorflow==2.21.0
+keras==3.14.1
+numpy==1.26.0
+pillow==10.2.0
+tensorflow-datasets==4.9.4

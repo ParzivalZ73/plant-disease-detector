@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plant-disease-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plant-disease
+  template:
+    metadata:
+      labels:
+        app: plant-disease
+    spec:
+      containers:
+        - name: plant-disease
+          image: YOUR_DOCKERHUB_USERNAME/plant-disease:latest
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"

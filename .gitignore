@@ -1,0 +1,15 @@
+model/plant_model.h5
+model/plant_model.keras
+__pycache__/
+*.pyc
+*.pyo
+.env
+venv/
+tfenv/
+tensorflow_datasets/
+datasets/
+data/
+checkpoints/
+*.tar
+.vscode/
+*.swp
