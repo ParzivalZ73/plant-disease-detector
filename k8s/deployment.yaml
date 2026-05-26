@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: plant-disease
-          image: YOUR_DOCKERHUB_USERNAME/plant-disease:latest
+          image: jazzy771/plant-disease:latest
           ports:
             - containerPort: 5000
           resources:
