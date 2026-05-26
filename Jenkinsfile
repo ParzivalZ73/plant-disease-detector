@@ -40,11 +40,14 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh "sudo -u ubuntu minikube kubectl -- apply -f k8s/deployment.yaml"
-                sh "sudo -u ubuntu minikube kubectl -- apply -f k8s/service.yaml"
-                sh "sudo -u ubuntu minikube kubectl -- rollout restart deployment/plant-disease-deployment"
+                sh """
+                    ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/.ssh/plant-key.pem ubuntu@3.25.164.160 '
+                    minikube kubectl -- apply -f /home/ubuntu/k8s/deployment.yaml &&
+                    minikube kubectl -- apply -f /home/ubuntu/k8s/service.yaml &&
+                    minikube kubectl -- rollout restart deployment/plant-disease-deployment
+                    '
+                    """
                 }
-            }
         }
 
     post {
