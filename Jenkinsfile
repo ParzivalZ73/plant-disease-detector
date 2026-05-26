@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USER = "YOUR_DOCKERHUB_USERNAME"
+        DOCKERHUB_USER = "jazzy771"
         IMAGE_NAME = "${DOCKERHUB_USER}/plant-disease"
         IMAGE_TAG = "latest"
     }
@@ -13,7 +13,12 @@ pipeline {
                 checkout scm
             }
         }
-
+        stage('Prepare Model') {
+            steps {
+                sh "docker pull jazzy771/plant-disease:latest || true"
+                sh "docker create --name temp jazzy771/plant-disease:latest && docker cp temp:/app/model/plant_model.keras model/plant_model.keras && docker rm temp || true"
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
@@ -35,12 +40,12 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh "kubectl apply -f k8s/deployment.yaml"
-                sh "kubectl apply -f k8s/service.yaml"
-                sh "kubectl rollout restart deployment/plant-disease-deployment"
+                sh "sudo -u ubuntu minikube kubectl -- apply -f k8s/deployment.yaml"
+                sh "sudo -u ubuntu minikube kubectl -- apply -f k8s/service.yaml"
+                sh "sudo -u ubuntu minikube kubectl -- rollout restart deployment/plant-disease-deployment"
+                }
             }
         }
-    }
 
     post {
         success {
